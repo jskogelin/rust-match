@@ -7,6 +7,7 @@ export default function match (matchTarget, ...branches) {
 
     if (matchingBranch) {
       matchingResultHandler = matchingBranch
+      break
     } else if (branch.default) {
       defaultBranch = branch(matchTarget)
     }
@@ -46,6 +47,20 @@ export function V (comparatorValue) {
       // If the type of value matches type, return a function
       // which runs the result handler
       if (comparatorValue === actualValue) {
+        return resultHandler
+      }
+    }
+  }
+}
+
+export function Some (expression) {
+  return (resultFn) => {
+    // Comparator
+    return (actualValue) => {
+      const resultHandler = () => resultFn(actualValue)
+      // If the type of value matches type, return a function
+      // which runs the result handler
+      if (expression(actualValue)) {
         return resultHandler
       }
     }
